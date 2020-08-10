@@ -1,7 +1,7 @@
 import random
 
 suits=('Hearts', 'Clubs', 'Diamonds', 'Spades')
-ranks=('Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten', 'Jack', 'Queen', 'King', 'Ace', 'Ace')
+ranks=('Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten', 'Jack', 'Queen', 'King', 'Ace')
 values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 'Nine':9, 'Ten':10, 'Jack':11, 'Queen':12, 'King':13, 'Ace':14}
 
 class Card:
@@ -48,8 +48,65 @@ class Player():
     def __str__(self):
         return f'Player {self.name} has {len(self.all_cards)} cards.'
 
+#Initialise Game
+player_one=Player("Player One")
+player_two=Player("Player Two")
+
+new_deck=Deck()
+new_deck.shuffle()
+
+for i in range(26):
+    player_one.add_cards(new_deck.deal_one())
+    player_two.add_cards(new_deck.deal_one())
+    
+        
+game_on=True
+round_num=0
+while game_on:
+    round_num+=1
+    print(f"Round {round_num}")
+    if len(player_one.all_cards)==0:
+        print("player one out of cards, player two wins")
+        game_on=False
+        break
+    elif len(player_two.all_cards)==0:
+        print("player two out of cards, player one wins")
+        game_on=False
+        break
+    else:
+        player_one_cards=[]
+        player_two_cards=[]
+        player_one_cards.append(player_one.remove_one())
+        player_two_cards.append(player_two.remove_one())
+
+
+        #play the game
+        war=True
+
+        while war:
+            if player_one_cards[-1].value>player_two_cards[-1].value:
+                print(f"Player two cards added to player one")
+                player_one.add_cards(player_one_cards)
+                player_one.add_cards(player_two_cards)
+                break
+                
+            elif player_one_cards[-1].value<player_two_cards[-1].value:
+                print(f"Player one cards added to player two")
+                player_two.add_cards(player_one_cards)
+                player_two.add_cards(player_two_cards)
+                break
+            else:
+                print("WAR!")
+                if len(player_one.all_cards)<5:
+                    print("Player one has run out of cards. Player TWO wins!")
+                    game_on=False
+                    break
+                elif len(player_two.all_cards)<5:
+                    print("Player two has run out of cards. Player ONE wins!")
+                    game_on=False
+                    break
+                else:
+                    for i in range (5):
+                        player_one_cards.append(player_one.remove_one())
+                        player_two_cards.append(player_two.remove_one())
             
-mydeck=Deck()
-print(mydeck.all_cards[0])
-mydeck.shuffle()
-print(mydeck.all_cards[0])
